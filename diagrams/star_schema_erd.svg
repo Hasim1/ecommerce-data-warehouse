@@ -1,0 +1,151 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1150 835" font-family="Helvetica, Arial, sans-serif">
+  <!-- ================================================================
+       Star Schema ERD — E-commerce Data Warehouse
+       fact_sales in the centre, six dimension tables around it.
+       ================================================================ -->
+  <rect x="0" y="0" width="1150" height="835" fill="#ffffff"/>
+
+  <!-- ======================= relationship lines ==================== -->
+  <g stroke="#64748b" stroke-width="1.5">
+    <line x1="300" y1="115" x2="425" y2="320"/>  <!-- dim_customer -->
+    <line x1="575" y1="180" x2="575" y2="250"/>  <!-- dim_date -->
+    <line x1="850" y1="125" x2="725" y2="320"/>  <!-- dim_product -->
+    <line x1="300" y1="700" x2="425" y2="540"/>  <!-- dim_store -->
+    <line x1="575" y1="660" x2="575" y2="600"/>  <!-- dim_payment_method -->
+    <line x1="850" y1="695" x2="725" y2="540"/>  <!-- dim_shipping_method -->
+  </g>
+  <!-- cardinality labels: 1 on the dimension side, * on the fact side -->
+  <g font-size="13" fill="#334155" font-weight="bold">
+    <text x="308" y="122">1</text><text x="406" y="316">*</text>
+    <text x="583" y="196">1</text><text x="583" y="246">*</text>
+    <text x="830" y="122">1</text><text x="733" y="316">*</text>
+    <text x="308" y="694">1</text><text x="406" y="552">*</text>
+    <text x="583" y="654">1</text><text x="583" y="616">*</text>
+    <text x="831" y="690">1</text><text x="735" y="554">*</text>
+  </g>
+
+  <!-- ========================= dim_customer ======================== -->
+  <g>
+    <rect x="40" y="30" width="260" height="170" rx="4" fill="#ffffff" stroke="#94a3b8"/>
+    <rect x="40" y="30" width="260" height="30" rx="4" fill="#0f766e"/>
+    <rect x="40" y="46" width="260" height="14" fill="#0f766e"/>
+    <text x="170" y="50" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">dim_customer</text>
+    <g font-size="12" fill="#333333">
+      <text x="52" y="74" font-weight="bold">customer_key  (PK)</text>
+      <text x="52" y="94">customer_id</text>
+      <text x="52" y="114">customer_name</text>
+      <text x="52" y="134">email</text>
+      <text x="52" y="154">city</text>
+      <text x="52" y="174">country</text>
+      <text x="52" y="194">customer_segment</text>
+    </g>
+  </g>
+
+  <!-- =========================== dim_date ========================== -->
+  <g>
+    <rect x="445" y="10" width="260" height="170" rx="4" fill="#ffffff" stroke="#94a3b8"/>
+    <rect x="445" y="10" width="260" height="30" rx="4" fill="#0f766e"/>
+    <rect x="445" y="26" width="260" height="14" fill="#0f766e"/>
+    <text x="575" y="30" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">dim_date</text>
+    <g font-size="12" fill="#333333">
+      <text x="457" y="54" font-weight="bold">date_key  (PK)</text>
+      <text x="457" y="74">full_date</text>
+      <text x="457" y="94">year</text>
+      <text x="457" y="114">quarter</text>
+      <text x="457" y="134">month / month_name</text>
+      <text x="457" y="154">day_of_week / day_name</text>
+      <text x="457" y="174">week_of_year / is_weekend</text>
+    </g>
+  </g>
+
+  <!-- ========================== dim_product ======================== -->
+  <g>
+    <rect x="850" y="30" width="260" height="190" rx="4" fill="#ffffff" stroke="#94a3b8"/>
+    <rect x="850" y="30" width="260" height="30" rx="4" fill="#0f766e"/>
+    <rect x="850" y="46" width="260" height="14" fill="#0f766e"/>
+    <text x="980" y="50" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">dim_product</text>
+    <g font-size="12" fill="#333333">
+      <text x="862" y="74" font-weight="bold">product_key  (PK)</text>
+      <text x="862" y="94">sku</text>
+      <text x="862" y="114">product_name</text>
+      <text x="862" y="134">category</text>
+      <text x="862" y="154">subcategory</text>
+      <text x="862" y="174">brand</text>
+      <text x="862" y="194">unit_cost</text>
+      <text x="862" y="214">list_price</text>
+    </g>
+  </g>
+
+  <!-- ========================== fact_sales ========================= -->
+  <g>
+    <rect x="425" y="250" width="300" height="350" rx="4" fill="#f8fafc" stroke="#1e3a8a" stroke-width="2"/>
+    <rect x="425" y="250" width="300" height="30" rx="4" fill="#1e3a8a"/>
+    <rect x="425" y="266" width="300" height="14" fill="#1e3a8a"/>
+    <text x="575" y="270" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">fact_sales</text>
+    <g font-size="12" fill="#333333">
+      <text x="437" y="294" font-weight="bold">sales_key  (PK)</text>
+      <text x="437" y="314">order_id  (degenerate dim.)</text>
+      <text x="437" y="334">order_line</text>
+      <text x="437" y="354" fill="#1e3a8a">date_key  (FK)</text>
+      <text x="437" y="374" fill="#1e3a8a">customer_key  (FK)</text>
+      <text x="437" y="394" fill="#1e3a8a">product_key  (FK)</text>
+      <text x="437" y="414" fill="#1e3a8a">store_key  (FK)</text>
+      <text x="437" y="434" fill="#1e3a8a">payment_method_key  (FK)</text>
+      <text x="437" y="454" fill="#1e3a8a">shipping_method_key  (FK)</text>
+      <text x="437" y="474">quantity</text>
+      <text x="437" y="494">unit_price</text>
+      <text x="437" y="514">unit_cost</text>
+      <text x="437" y="534">discount_amount</text>
+      <text x="437" y="554">gross_amount</text>
+      <text x="437" y="574">total_amount</text>
+      <text x="437" y="594">profit_amount</text>
+    </g>
+  </g>
+
+  <!-- =========================== dim_store ========================= -->
+  <g>
+    <rect x="40" y="630" width="260" height="150" rx="4" fill="#ffffff" stroke="#94a3b8"/>
+    <rect x="40" y="630" width="260" height="30" rx="4" fill="#0f766e"/>
+    <rect x="40" y="646" width="260" height="14" fill="#0f766e"/>
+    <text x="170" y="650" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">dim_store</text>
+    <g font-size="12" fill="#333333">
+      <text x="52" y="674" font-weight="bold">store_key  (PK)</text>
+      <text x="52" y="694">store_id</text>
+      <text x="52" y="714">store_name</text>
+      <text x="52" y="734">channel</text>
+      <text x="52" y="754">city</text>
+      <text x="52" y="774">country</text>
+    </g>
+  </g>
+
+  <!-- ====================== dim_payment_method ===================== -->
+  <g>
+    <rect x="445" y="660" width="260" height="70" rx="4" fill="#ffffff" stroke="#94a3b8"/>
+    <rect x="445" y="660" width="260" height="30" rx="4" fill="#0f766e"/>
+    <rect x="445" y="676" width="260" height="14" fill="#0f766e"/>
+    <text x="575" y="680" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">dim_payment_method</text>
+    <g font-size="12" fill="#333333">
+      <text x="457" y="704" font-weight="bold">payment_method_key  (PK)</text>
+      <text x="457" y="724">payment_method_name</text>
+    </g>
+  </g>
+
+  <!-- ===================== dim_shipping_method ===================== -->
+  <g>
+    <rect x="850" y="630" width="260" height="110" rx="4" fill="#ffffff" stroke="#94a3b8"/>
+    <rect x="850" y="630" width="260" height="30" rx="4" fill="#0f766e"/>
+    <rect x="850" y="646" width="260" height="14" fill="#0f766e"/>
+    <text x="980" y="650" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">dim_shipping_method</text>
+    <g font-size="12" fill="#333333">
+      <text x="862" y="674" font-weight="bold">shipping_method_key  (PK)</text>
+      <text x="862" y="694">shipping_method_name</text>
+      <text x="862" y="714">avg_delivery_days</text>
+      <text x="862" y="734">base_fee</text>
+    </g>
+  </g>
+
+  <!-- ============================ footer ============================ -->
+  <text x="575" y="815" text-anchor="middle" font-size="14" fill="#475569" font-weight="bold">
+    Star Schema — E-commerce Data Warehouse  (1 = one dimension row, * = many fact rows)
+  </text>
+</svg>

@@ -1,0 +1,93 @@
+// =====================================================================
+// Star Schema — E-commerce Data Warehouse
+// ---------------------------------------------------------------------
+// DBML source for https://dbdiagram.io
+// Paste this file's contents into dbdiagram.io to get an interactive
+// ERD, then use Export → PNG to create diagrams/star_schema_erd.png
+// for the GitHub README.
+// =====================================================================
+
+Table fact_sales {
+  sales_key           bigint    [pk, increment]
+  order_id            varchar   [not null, note: 'Degenerate dimension']
+  order_line          smallint  [not null]
+  date_key            int       [not null]
+  customer_key        int       [not null]
+  product_key         int       [not null]
+  store_key           int       [not null]
+  payment_method_key  int       [not null]
+  shipping_method_key int       [not null]
+  quantity            int       [not null]
+  unit_price          decimal   [not null]
+  unit_cost           decimal   [not null]
+  discount_amount     decimal   [not null, default: 0]
+  gross_amount        decimal   [not null, note: 'quantity * unit_price']
+  total_amount        decimal   [not null, note: 'gross - discount']
+  profit_amount       decimal   [not null, note: 'total - quantity * unit_cost']
+
+  Note: 'Grain: one row per order line'
+}
+
+Table dim_date {
+  date_key     int     [pk, note: 'Smart key YYYYMMDD']
+  full_date    date    [not null, unique]
+  year         int     [not null]
+  quarter      int     [not null]
+  month        int     [not null]
+  month_name   varchar [not null]
+  day_of_month int     [not null]
+  day_of_week  int     [not null, note: 'ISO: 1 = Monday']
+  day_name     varchar [not null]
+  week_of_year int     [not null]
+  is_weekend   boolean [not null]
+}
+
+Table dim_customer {
+  customer_key     int     [pk, increment]
+  customer_id      varchar [not null, unique, note: 'Business key']
+  customer_name    varchar [not null]
+  email            varchar [not null]
+  city             varchar
+  country          varchar [not null]
+  customer_segment varchar [not null, note: 'Consumer | Corporate | Small Business']
+  signup_date      date
+}
+
+Table dim_product {
+  product_key  int     [pk, increment]
+  sku          varchar [not null, unique, note: 'Business key']
+  product_name varchar [not null]
+  category     varchar [not null]
+  subcategory  varchar
+  brand        varchar
+  unit_cost    decimal [not null]
+  list_price   decimal [not null]
+}
+
+Table dim_store {
+  store_key  int     [pk, increment]
+  store_id   varchar [not null, unique]
+  store_name varchar [not null]
+  channel    varchar [not null, note: 'Online | Retail']
+  city       varchar
+  country    varchar [not null]
+}
+
+Table dim_payment_method {
+  payment_method_key  int     [pk, increment]
+  payment_method_name varchar [not null, unique]
+}
+
+Table dim_shipping_method {
+  shipping_method_key  int     [pk, increment]
+  shipping_method_name varchar [not null, unique]
+  avg_delivery_days    int     [not null]
+  base_fee             decimal [not null, default: 0]
+}
+
+Ref: fact_sales.date_key            > dim_date.date_key
+Ref: fact_sales.customer_key        > dim_customer.customer_key
+Ref: fact_sales.product_key         > dim_product.product_key
+Ref: fact_sales.store_key           > dim_store.store_key
+Ref: fact_sales.payment_method_key  > dim_payment_method.payment_method_key
+Ref: fact_sales.shipping_method_key > dim_shipping_method.shipping_method_key
